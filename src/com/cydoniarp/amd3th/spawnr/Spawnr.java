@@ -53,7 +53,7 @@ public class Spawnr extends JavaPlugin {
 				return true;
 			}
 			if (Spawnr.properties.keyExists("x")) {
-				if (cmdName.equalsIgnoreCase("spawntp")){
+				if (cmdName.equalsIgnoreCase("spawn")){
 					Location locS = ((Player)sender).getLocation();
 					locS.setX(properties.getDouble("x"));
 					locS.setY(properties.getDouble("y"));

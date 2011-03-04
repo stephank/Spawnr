@@ -7,6 +7,6 @@ commands:
   spawnr:
       description: Sets spawn location coords.
       usage: /<command> 
-  spawntp:
+  spawn:
       description: Teleports player to location coords.
       usage: /<command>
