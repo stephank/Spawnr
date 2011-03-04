@@ -1,5 +1,7 @@
 package com.cydoniarp.amd3th.spawnr;
 
+import java.io.File;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -14,7 +16,10 @@ public class SpawnPlayerListener extends PlayerListener {
 	
 	public void onPlayerJoin(PlayerEvent event) {
 		Player player = event.getPlayer();
-		plugin.teleportToSpawn(player);
+		File playersDir = new File(player.getWorld().getName(), "players");
+		File datFile = new File(playersDir, player.getName() + ".dat");
+		if (!datFile.exists())
+			plugin.teleportToSpawn(player);
 	}
 	
 	public void onPlayerRespawn(PlayerRespawnEvent event) {

@@ -54,12 +54,14 @@ public class Spawnr extends JavaPlugin {
 			conf.setProperty("y", loc.getY());
 			conf.setProperty("z", loc.getZ());
 			conf.setProperty("yaw", loc.getYaw());
+			conf.save();
 			player.sendMessage("Spawnr point set.");
 			return true;
 		}
 
 		if (cmdName.equalsIgnoreCase("spawn")) {
 			teleportToSpawn(player);
+			player.sendMessage("Teleported!");
 			return true;
 		}
 
@@ -75,6 +77,5 @@ public class Spawnr extends JavaPlugin {
 		locS.setZ(conf.getDouble("z", 0));
 		locS.setYaw((float)conf.getDouble("yaw", 0));
 		player.teleportTo(locS);
-		player.sendMessage("Teleported!");
 	}
 }
