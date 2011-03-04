@@ -15,12 +15,11 @@ import java.util.logging.Logger;
 public final class Property {
 	private static final Logger log = Logger.getLogger("Minecraft");
 	private Properties properties;
-	private String fileName;
+	private File file;
 
-	public Property(String fileName) {
-		this.fileName = fileName;
+	public Property(File file) {
+		this.file = file;
 		this.properties = new Properties();
-		File file = new File(fileName);
 
 		if (file.exists()) {
 			load();
@@ -31,23 +30,23 @@ public final class Property {
 
 	public void load() {
 		try {
-			this.properties.load(new FileInputStream(this.fileName));
+			this.properties.load(new FileInputStream(this.file));
 		} catch (IOException ex) {
-			log.log(Level.SEVERE, "[Spawnr]: Unable to load "+this.fileName, ex);
+			log.log(Level.SEVERE, "[Spawnr]: Unable to load "+this.file.getAbsolutePath(), ex);
 		}
 	}
 
 	public void save() {
 		try {
-			this.properties.store(new FileOutputStream(this.fileName), "Minecraft Properties File");
+			this.properties.store(new FileOutputStream(this.file), "Minecraft Properties File");
 		} catch (IOException ex) {
-			log.log(Level.SEVERE, "[Spawnr]: Unable to save "+this.fileName, ex);
+			log.log(Level.SEVERE, "[Spawnr]: Unable to save "+this.file.getAbsolutePath(), ex);
 		}
 	}
 
 	public Map<String, String> returnMap() throws Exception {
 		Map<String, String> map = new HashMap<String, String>();
-		BufferedReader reader = new BufferedReader(new FileReader(this.fileName));
+		BufferedReader reader = new BufferedReader(new FileReader(this.file));
 		String line;
 		while ((line = reader.readLine()) != null) {
 			if ((line.trim().length() == 0) || 

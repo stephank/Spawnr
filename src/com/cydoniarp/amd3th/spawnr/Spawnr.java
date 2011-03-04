@@ -1,9 +1,11 @@
 package com.cydoniarp.amd3th.spawnr;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,7 +18,17 @@ public class Spawnr extends JavaPlugin {
 	private final SpawnPlayerListener pListener = new SpawnPlayerListener(this);
 	private static Logger log = Logger.getLogger("Minecraft");
 	
-	public static Property properties;
+	private HashMap<Long, Property> properties;
+	
+	public Property getWorldProperty(World world) {
+		long worldId = world.getId();
+		Property result = properties.get(worldId);
+		if (result == null) {
+			result = new Property(new File(getDataFolder(), worldId + ".spawn"));
+			properties.put(worldId, result);
+		}
+		return result;
+	}
 	
 	public void onEnable() {
 		PluginManager pm = getServer().getPluginManager();
@@ -36,38 +48,42 @@ public class Spawnr extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
 		String cmdName = cmd.getName();
-		if (sender instanceof Player) {
-			if (cmdName.equalsIgnoreCase("spawnr")) {
-				if (((Player) sender).isOp()) {
-					Location loc = ((Player) sender).getLocation();
-					properties.setDouble("x", loc.getX());
-					properties.setDouble("y", loc.getY());
-					properties.setDouble("z", loc.getZ());
-					properties.setFloat("yaw", loc.getYaw());
-					((Player) sender).sendMessage("Spawnr point set.");
-					return true;
-				} else {
-					((Player) sender).sendMessage("You are not OP");
-					return true;
-				}
-			}
-
-			if (cmdName.equalsIgnoreCase("spawn")) {
-				if (Spawnr.properties.keyExists("x")) {
-					Location locS = ((Player) sender).getLocation();
-					locS.setX(properties.getDouble("x"));
-					locS.setY(properties.getDouble("y"));
-					locS.setZ(properties.getDouble("z"));
-					locS.setYaw(properties.getFloat("yaw"));
-					((Player) sender).teleportTo(locS);
-					((Player) sender).sendMessage("Teleported!");
-					return true;
-				} else {
-					((Player) sender).sendMessage("No point to teleport to.");
-					return true;
-				}
-			}
+		if (!(sender instanceof Player)) {
+			sender.sendMessage("You must be ingame to use this command.");
+			return true;
 		}
+		
+		Player player = (Player)sender;
+		Property prop = getWorldProperty(player.getWorld());
+		if (cmdName.equalsIgnoreCase("spawnr")) {
+			if (!player.isOp()) {
+				player.sendMessage("You are not OP");
+				return true;
+			}
+			Location loc = player.getLocation();
+			prop.setDouble("x", loc.getX());
+			prop.setDouble("y", loc.getY());
+			prop.setDouble("z", loc.getZ());
+			prop.setFloat("yaw", loc.getYaw());
+			player.sendMessage("Spawnr point set.");
+			return true;
+		}
+
+		if (cmdName.equalsIgnoreCase("spawn")) {
+			if (!prop.keyExists("x")) {
+				player.sendMessage("No point to teleport to.");
+				return true;
+			}
+			Location locS = player.getLocation();
+			locS.setX(prop.getDouble("x"));
+			locS.setY(prop.getDouble("y"));
+			locS.setZ(prop.getDouble("z"));
+			locS.setYaw(prop.getFloat("yaw"));
+			player.teleportTo(locS);
+			player.sendMessage("Teleported!");
+			return true;
+		}
+
 		return false;
 	}
 }

@@ -15,38 +15,38 @@ public class SpawnPlayerListener extends PlayerListener {
 	
 	public void onPlayerJoin(PlayerEvent event) {
 		Player player = event.getPlayer();
-		Spawnr.properties = new Property("plugins/Spawnr/"+player.getWorld().getId()+".spawn");
-		if (!Spawnr.properties.keyExists("x")) {
-			Spawnr.properties.setString("x", " ");
-			Spawnr.properties.setString("y", " ");
-			Spawnr.properties.setString("z", " ");
-			Spawnr.properties.setString("yaw", " ");
+		Property prop = plugin.getWorldProperty(player.getWorld());
+		if (!prop.keyExists("x")) {
+			prop.setString("x", " ");
+			prop.setString("y", " ");
+			prop.setString("z", " ");
+			prop.setString("yaw", " ");
 			Location oLoc = player.getWorld().getSpawnLocation();
 			player.teleportTo(oLoc);
 			if(player.isOp()) {
 				player.sendMessage("Spawnr point needs to be set.");
 			}
 		}
-		else if (!Spawnr.properties.keyExists(player.getName())) {
+		else if (!prop.keyExists(player.getName())) {
 			Location loc = player.getLocation();
-			loc.setX(Spawnr.properties.getDouble("x"));
-			loc.setY(Spawnr.properties.getDouble("y"));
-			loc.setZ(Spawnr.properties.getDouble("z"));
-			loc.setYaw(Spawnr.properties.getFloat("yaw"));
+			loc.setX(prop.getDouble("x"));
+			loc.setY(prop.getDouble("y"));
+			loc.setZ(prop.getDouble("z"));
+			loc.setYaw(prop.getFloat("yaw"));
 			player.teleportTo(loc);
-			Spawnr.properties.setBoolean(player.getName(), true);
+			prop.setBoolean(player.getName(), true);
 		}
 	}
 	
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
-		Spawnr.properties = new Property("plugins/Spawnr/"+player.getWorld().getId()+".spawn");
-		if (Spawnr.properties.keyExists("x")){
+		Property prop = plugin.getWorldProperty(player.getWorld());
+		if (prop.keyExists("x")){
 			Location loc = player.getLocation();
-			loc.setX(Spawnr.properties.getDouble("x"));
-			loc.setY(Spawnr.properties.getDouble("y"));
-			loc.setZ(Spawnr.properties.getDouble("z"));
-			loc.setYaw(Spawnr.properties.getFloat("yaw"));
+			loc.setX(prop.getDouble("x"));
+			loc.setY(prop.getDouble("y"));
+			loc.setZ(prop.getDouble("z"));
+			loc.setYaw(prop.getFloat("yaw"));
 			event.setRespawnLocation(loc);
 		}
 		else {
