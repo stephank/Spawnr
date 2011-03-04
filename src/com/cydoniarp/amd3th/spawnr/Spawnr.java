@@ -36,36 +36,36 @@ public class Spawnr extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
 		String cmdName = cmd.getName();
-		if (sender instanceof Player){
-			if (((Player)sender).isOp()) {
-				if (cmdName.equalsIgnoreCase("spawnr")){
-					Location loc = ((Player)sender).getLocation();
+		if (sender instanceof Player) {
+			if (cmdName.equalsIgnoreCase("spawnr")) {
+				if (((Player) sender).isOp()) {
+					Location loc = ((Player) sender).getLocation();
 					properties.setDouble("x", loc.getX());
 					properties.setDouble("y", loc.getY());
 					properties.setDouble("z", loc.getZ());
 					properties.setFloat("yaw", loc.getYaw());
-					((Player)sender).sendMessage("Spawnr point set.");
+					((Player) sender).sendMessage("Spawnr point set.");
+					return true;
+				} else {
+					((Player) sender).sendMessage("You are not OP");
 					return true;
 				}
-				
-			} else {
-				((Player)sender).sendMessage("You are not OP");
-				return true;
 			}
-			if (Spawnr.properties.keyExists("x")) {
-				if (cmdName.equalsIgnoreCase("spawn")){
-					Location locS = ((Player)sender).getLocation();
+
+			if (cmdName.equalsIgnoreCase("spawn")) {
+				if (Spawnr.properties.keyExists("x")) {
+					Location locS = ((Player) sender).getLocation();
 					locS.setX(properties.getDouble("x"));
 					locS.setY(properties.getDouble("y"));
 					locS.setZ(properties.getDouble("z"));
 					locS.setYaw(properties.getFloat("yaw"));
-					((Player)sender).teleportTo(locS);
-					((Player)sender).sendMessage("Teleported!");
+					((Player) sender).teleportTo(locS);
+					((Player) sender).sendMessage("Teleported!");
+					return true;
+				} else {
+					((Player) sender).sendMessage("No point to teleport to.");
 					return true;
 				}
-			} else {
-				((Player)sender).sendMessage("No point to teleport to.");
-				return true;
 			}
 		}
 		return false;
