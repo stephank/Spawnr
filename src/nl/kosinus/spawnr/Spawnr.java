@@ -91,7 +91,13 @@ public final class Spawnr extends JavaPlugin {
 
         // /spawn
         if (cmdName.equalsIgnoreCase("spawn")) {
-            Location loc = config.getSpawn(player);
+            Location loc;
+            if (config.getTeleportToCustomSpawn()) {
+                loc = config.getSpawn(player);
+            }
+            else {
+                loc = config.getSpawn();
+            }
             player.teleportTo(loc);
             player.sendMessage("Teleported!");
             return true;

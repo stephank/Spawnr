@@ -160,7 +160,7 @@ public final class Configuration {
         this.teleportToCustomSpawn = teleportToCustomSpawn;
     }
 
-    public boolean isTeleportToCustomSpawn() {
+    public boolean getTeleportToCustomSpawn() {
         return teleportToCustomSpawn;
     }
 
