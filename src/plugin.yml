@@ -1,12 +1,12 @@
 name: Spawnr
-main: com.cydoniarp.amd3th.spawnr.Spawnr
-version: 1.3b
-author: amd3th
+main: nl.kosinus.spawnr.Spawnr
+version: 0.1
+authors: [kosinus, amd3th]
 description: Sets player initial spawn and respawn location to exact coordinates that OP sets.
 commands:
-  spawnr:
-      description: Sets spawn location coords.
-      usage: /<command> 
+  setspawn:
+      description: Sets a new spawn location.
+      usage: /<command> [ global | <player> ]
   spawn:
-      description: Teleports player to location coords.
+      description: Teleport to the spawn point.
       usage: /<command>

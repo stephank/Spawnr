@@ -2,16 +2,17 @@ package nl.kosinus.spawnr;
 
 import java.io.File;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-public class SpawnPlayerListener extends PlayerListener {
-    public Spawnr plugin;
+final class SpawnPlayerListener extends PlayerListener {
+    private final Spawnr spawnr;
 
-    public SpawnPlayerListener(Spawnr plugin) {
-        this.plugin = plugin;
+    SpawnPlayerListener(Spawnr spawnr) {
+        this.spawnr = spawnr;
     }
 
     @Override
@@ -19,12 +20,15 @@ public class SpawnPlayerListener extends PlayerListener {
         Player player = event.getPlayer();
         File playersDir = new File(player.getWorld().getName(), "players");
         File datFile = new File(playersDir, player.getName() + ".dat");
-        if (!datFile.exists())
-            plugin.moveToSpawn(player);
+        if (!datFile.exists()) {
+            Location loc = spawnr.config.getSpawn(player);
+            player.teleportTo(loc);
+        }
     }
 
     @Override
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        plugin.moveToSpawn(event.getRespawnLocation(), event.getPlayer());
+        Location loc = spawnr.config.getSpawn(event.getPlayer());
+        event.setRespawnLocation(loc);
     }
 }
