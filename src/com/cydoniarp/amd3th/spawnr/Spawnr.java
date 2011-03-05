@@ -47,7 +47,7 @@ public class Spawnr extends JavaPlugin {
         Player player = (Player) sender;
         if (cmdName.equalsIgnoreCase("setspawn")) {
             if (!player.isOp()) {
-                player.sendMessage("You are not OP");
+                player.sendMessage("You are not an OP.");
                 return true;
             }
             Configuration conf = getConfiguration();
