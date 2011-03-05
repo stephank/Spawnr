@@ -16,7 +16,6 @@ public class Spawnr extends JavaPlugin {
     private final SpawnPlayerListener pListener = new SpawnPlayerListener(this);
     private final Logger log = getServer().getLogger();
 
-    @Override
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Event.Type.PLAYER_JOIN, this.pListener, Event.Priority.Normal, this);
@@ -30,7 +29,6 @@ public class Spawnr extends JavaPlugin {
         log.info("[" + pdf.getName() + "] v" + pdf.getVersion() + " has been enabled");
     }
 
-    @Override
     public void onDisable() {
         PluginDescriptionFile pdf = this.getDescription();
         log.info("[" + pdf.getName() + "] v" + pdf.getVersion() + " has been disabled.");
