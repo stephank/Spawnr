@@ -20,11 +20,11 @@ public class SpawnPlayerListener extends PlayerListener {
         File playersDir = new File(player.getWorld().getName(), "players");
         File datFile = new File(playersDir, player.getName() + ".dat");
         if (!datFile.exists())
-            plugin.teleportToSpawn(player);
+            plugin.moveToSpawn(player);
     }
 
     @Override
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        plugin.setToSpawn(event.getRespawnLocation());
+        plugin.moveToSpawn(event.getRespawnLocation(), event.getPlayer());
     }
 }

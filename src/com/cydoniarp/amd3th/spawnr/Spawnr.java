@@ -63,7 +63,7 @@ public class Spawnr extends JavaPlugin {
         }
 
         if (cmdName.equalsIgnoreCase("spawn")) {
-            teleportToSpawn(player);
+            moveToSpawn(player);
             player.sendMessage("Teleported!");
             return true;
         }
@@ -71,18 +71,29 @@ public class Spawnr extends JavaPlugin {
         return false;
     }
 
-    public void setToSpawn(Location locS) {
-        Configuration conf = getConfiguration();
-        locS.setWorld(getServer().getWorld(conf.getString("world", "world")));
-        locS.setX(conf.getDouble("x", 0));
-        locS.setY(conf.getDouble("y", 64));
-        locS.setZ(conf.getDouble("z", 0));
-        locS.setYaw((float) conf.getDouble("yaw", 0));
+    /**
+     * Move a player to his/her spawn point.
+     *
+     * @param player The player to teleport.
+     */
+    public void moveToSpawn(Player player) {
+        Location loc = player.getLocation();
+        moveToSpawn(loc, player);
+        player.teleportTo(loc);
     }
 
-    public void teleportToSpawn(Player player) {
-        Location loc = player.getLocation();
-        setToSpawn(loc);
-        player.teleportTo(loc);
+    /**
+     * Move a Location to the player's spawn point.
+     *
+     * @param location The Location object to modify.
+     * @param player The player to use as a reference.
+     */
+    public void moveToSpawn(Location location, Player player) {
+        Configuration conf = getConfiguration();
+        location.setWorld(getServer().getWorld(conf.getString("world", "world")));
+        location.setX(conf.getDouble("x", 0));
+        location.setY(conf.getDouble("y", 64));
+        location.setZ(conf.getDouble("z", 0));
+        location.setYaw((float) conf.getDouble("yaw", 0));
     }
 }
