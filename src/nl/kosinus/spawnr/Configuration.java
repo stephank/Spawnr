@@ -142,19 +142,10 @@ public final class Configuration {
 
     private Spawnr spawnr;
 
-    private String customSpawnRole = null;
     private boolean teleportToCustomSpawn = false;
 
     private SpawnPoint global = new SpawnPoint();
     private Map<String, SpawnPoint> players = new HashMap<String, Configuration.SpawnPoint>();
-
-    public void setCustomSpawnRole(String customSpawnRole) {
-        this.customSpawnRole = customSpawnRole;
-    }
-
-    public String getCustomSpawnRole() {
-        return customSpawnRole;
-    }
 
     public void setTeleportToCustomSpawn(boolean teleportToCustomSpawn) {
         this.teleportToCustomSpawn = teleportToCustomSpawn;

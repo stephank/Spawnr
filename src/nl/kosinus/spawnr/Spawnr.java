@@ -3,28 +3,40 @@ package nl.kosinus.spawnr;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.anjocaido.groupmanager.GroupManager;
+import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Spawnr extends JavaPlugin {
-    final SpawnPlayerListener pListener = new SpawnPlayerListener(this);
+    final SpawnrPlayerListener playerListener = new SpawnrPlayerListener(this);
+    final SpawnrServerListener serverListener = new SpawnrServerListener(this);
     Configuration config;
     Logger log;
+    WorldsHolder groupManager;
 
     public void onEnable() {
         log = getServer().getLogger();
 
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvent(Event.Type.PLAYER_JOIN, this.pListener, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_RESPAWN, this.pListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Monitor, this);
+        pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Monitor, this);
 
         config = Configuration.load(this);
+
+        Plugin p = pm.getPlugin("GroupManager");
+        if (p != null && p.isEnabled()) {
+            setGroupManager(p);
+        }
 
         PluginDescriptionFile pdf = this.getDescription();
         log.info("[" + pdf.getName() + "] v" + pdf.getVersion() + " has been enabled");
@@ -83,26 +95,49 @@ public final class Spawnr extends JavaPlugin {
             }
             // No optional parameter, he wants to set his own spawn point.
             else {
-                config.setSpawn(player, loc);
-                player.sendMessage("Updated your spawn point.");
+                // Check with GroupManager, if it's enabled.
+                if (groupManager != null
+                        && !groupManager.getWorldPermissions(player).has(player,
+                                "spawnr.personalspawn")) {
+                    player.sendMessage("You do not have permission to do that");
+                }
+                // We're good to go.
+                else {
+                    config.setSpawn(player, loc);
+                    player.sendMessage("Updated your spawn point.");
+                }
             }
             return true;
         }
 
         // /spawn
         if (cmdName.equalsIgnoreCase("spawn")) {
+            // Check our configuration if we always want the global spawn.
             Location loc;
             if (config.getTeleportToCustomSpawn()) {
                 loc = config.getSpawn(player);
-            }
-            else {
+            } else {
                 loc = config.getSpawn();
             }
+            // Send him on his way.
             player.teleportTo(loc);
             player.sendMessage("Teleported!");
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Helper used to update the GroupManager reference.
+     *
+     * @param p The GroupManager plugin, or null.
+     */
+    void setGroupManager(Plugin p) {
+        if (p == null) {
+            groupManager = null;
+        } else {
+            groupManager = ((GroupManager) p).getWorldsHolder();
+        }
     }
 }

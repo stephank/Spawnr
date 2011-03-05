@@ -8,10 +8,10 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-final class SpawnPlayerListener extends PlayerListener {
+final class SpawnrPlayerListener extends PlayerListener {
     private final Spawnr spawnr;
 
-    SpawnPlayerListener(Spawnr spawnr) {
+    SpawnrPlayerListener(Spawnr spawnr) {
         this.spawnr = spawnr;
     }
 
