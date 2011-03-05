@@ -1,4 +1,4 @@
-package com.cydoniarp.amd3th.spawnr;
+package nl.kosinus.spawnr;
 
 import java.util.logging.Logger;
 
