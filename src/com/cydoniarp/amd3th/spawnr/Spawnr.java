@@ -45,7 +45,7 @@ public class Spawnr extends JavaPlugin {
         }
 
         Player player = (Player) sender;
-        if (cmdName.equalsIgnoreCase("spawnr")) {
+        if (cmdName.equalsIgnoreCase("setspawn")) {
             if (!player.isOp()) {
                 player.sendMessage("You are not OP");
                 return true;
@@ -58,7 +58,7 @@ public class Spawnr extends JavaPlugin {
             conf.setProperty("z", loc.getZ());
             conf.setProperty("yaw", loc.getYaw());
             conf.save();
-            player.sendMessage("Spawnr point set.");
+            player.sendMessage("Spawn point set.");
             return true;
         }
 
