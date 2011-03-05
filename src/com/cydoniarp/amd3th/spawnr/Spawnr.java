@@ -68,14 +68,18 @@ public class Spawnr extends JavaPlugin {
 		return false;
 	}
 	
-	public void teleportToSpawn(Player player) {
+	public void setToSpawn(Location locS) {
 		Configuration conf = getConfiguration();
-		Location locS = player.getLocation();
 		locS.setWorld(getServer().getWorld(conf.getString("world", "world")));
 		locS.setX(conf.getDouble("x", 0));
 		locS.setY(conf.getDouble("y", 64));
 		locS.setZ(conf.getDouble("z", 0));
 		locS.setYaw((float)conf.getDouble("yaw", 0));
-		player.teleportTo(locS);
+	}
+	
+	public void teleportToSpawn(Player player) {
+		Location loc = player.getLocation();
+		setToSpawn(loc);
+		player.teleportTo(loc);
 	}
 }

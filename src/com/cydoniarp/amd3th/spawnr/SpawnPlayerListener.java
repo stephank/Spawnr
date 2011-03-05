@@ -23,7 +23,6 @@ public class SpawnPlayerListener extends PlayerListener {
 	}
 	
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		Player player = event.getPlayer();
-		plugin.teleportToSpawn(player);
+		plugin.setToSpawn(event.getRespawnLocation());
 	}
 }
