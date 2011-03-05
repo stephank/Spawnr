@@ -14,7 +14,7 @@ import org.bukkit.util.config.Configuration;
 
 public class Spawnr extends JavaPlugin {
     private final SpawnPlayerListener pListener = new SpawnPlayerListener(this);
-    private static Logger log = Logger.getLogger("Minecraft");
+    private final Logger log = getServer().getLogger();
 
     @Override
     public void onEnable() {
