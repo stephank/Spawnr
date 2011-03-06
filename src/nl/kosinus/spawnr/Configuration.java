@@ -189,7 +189,7 @@ public final class Configuration {
     Location getSpawn(Player player) {
         SpawnPoint s = players.get(player.getName());
         if (s == null) {
-            return getSpawn();
+            return null;
         } else {
             return s.toLocation(spawnr.getServer());
         }

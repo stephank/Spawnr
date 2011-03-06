@@ -94,15 +94,12 @@ public final class Spawnr extends JavaPlugin {
             }
             // No optional parameter, he wants to set his own spawn point.
             else {
-                // Check with GroupManager, if it's enabled.
-                if (groupManager != null
-                        && !groupManager.getPermissionHandler().has(player, "spawnr.personalspawn")) {
-                    player.sendMessage("You do not have permission to do that");
-                }
-                // We're good to go.
-                else {
+                if (hasPersonalSpawnPermission(player)) {
                     config.setSpawn(player, loc);
                     player.sendMessage("Updated your spawn point.");
+                }
+                else {
+                    player.sendMessage("You do not have permission to do that");
                 }
             }
             return true;
@@ -110,15 +107,7 @@ public final class Spawnr extends JavaPlugin {
 
         // /spawn
         if (cmdName.equalsIgnoreCase("spawn")) {
-            // Check our configuration if we always want the global spawn.
-            Location loc;
-            if (config.getTeleportToCustomSpawn()) {
-                loc = config.getSpawn(player);
-            } else {
-                loc = config.getSpawn();
-            }
-            // Send him on his way.
-            player.teleportTo(loc);
+            player.teleportTo(getSpawnLocationFor(player));
             player.sendMessage("Teleported!");
             return true;
         }
@@ -137,5 +126,43 @@ public final class Spawnr extends JavaPlugin {
         } else {
             groupManager = (GroupManager) p;
         }
+    }
+
+    /**
+     * Helper to check if a player is allowed to have a personal spawn.
+     *
+     * @param player The player to check.
+     * @return Whether the player is granted permission.
+     */
+    boolean hasPersonalSpawnPermission(Player player) {
+        // Without GroupManager, anyone can.
+        if (groupManager == null) {
+            return true;
+        }
+        // Check with GroupManager.
+        if (!groupManager.getPermissionHandler().has(player, "spawnr.personalspawn")) {
+            return false;
+        }
+        // We're okay.
+        return true;
+    }
+
+    /**
+     * Helper to get the appropriate spawn location for a player.
+     *
+     * @param player The player to check for.
+     * @return A spawn location.
+     */
+    Location getSpawnLocationFor(Player player) {
+        Location loc = null;
+        // Check our configuration if we allow teleporting to custom spawn.
+        if (config.getTeleportToCustomSpawn() && hasPersonalSpawnPermission(player)) {
+            loc = config.getSpawn(player);
+        }
+        // Otherwise, use the global spawn.
+        if (loc == null) {
+            loc = config.getSpawn();
+        }
+        return loc;
     }
 }
