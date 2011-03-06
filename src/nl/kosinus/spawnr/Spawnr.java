@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.anjocaido.groupmanager.GroupManager;
-import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,7 +19,7 @@ public final class Spawnr extends JavaPlugin {
     final SpawnrServerListener serverListener = new SpawnrServerListener(this);
     Configuration config;
     Logger log;
-    WorldsHolder groupManager;
+    GroupManager groupManager;
 
     public void onEnable() {
         log = getServer().getLogger();
@@ -97,8 +96,7 @@ public final class Spawnr extends JavaPlugin {
             else {
                 // Check with GroupManager, if it's enabled.
                 if (groupManager != null
-                        && !groupManager.getWorldPermissions(player).has(player,
-                                "spawnr.personalspawn")) {
+                        && !groupManager.getPermissionHandler().has(player, "spawnr.personalspawn")) {
                     player.sendMessage("You do not have permission to do that");
                 }
                 // We're good to go.
@@ -137,7 +135,7 @@ public final class Spawnr extends JavaPlugin {
         if (p == null) {
             groupManager = null;
         } else {
-            groupManager = ((GroupManager) p).getWorldsHolder();
+            groupManager = (GroupManager) p;
         }
     }
 }

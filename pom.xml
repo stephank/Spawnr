@@ -35,7 +35,7 @@
     <dependency>
       <groupId>org.anjocaido</groupId>
       <artifactId>GroupManager</artifactId>
-      <version>1.0-pre-alpha-3-SNAPSHOT</version>
+      <version>0.99d-SNAPSHOT</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
